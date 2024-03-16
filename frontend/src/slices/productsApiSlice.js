@@ -1,7 +1,7 @@
 import { PRODUCTS_URL } from '../constants';
 import { apiSlice } from './apiSlice';
 
-export const productSlice = apiSlice.injectEndpoints({
+export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query({
             query: ({ pageNumber }) => ({
@@ -70,7 +70,7 @@ export const {
     useDeleteProductMutation,
     useCreateReviewMutation,
     useGetTopProductsQuery,
-} = productSlice;
+} = productsApiSlice;
 //use-Something-query to fetch data and use-something-mutation to change builder ki peoperty hai
 
 
