@@ -12,11 +12,26 @@ const {protect,checkAdmin}=require('../middleware/authenticate');
 // connectDB();
 
 // getting all products from database
-router.get('/api/products', wrapAsync(async (req,res)=>{
-    const products =  await Product.find({});// passing empty object to get all product
-    //res.send("hello");
-    res.json(products);
-}));
+router.get('/api/products',wrapAsync(async (req, res) => {
+    const pageSize = process.env.PAGINATION_LIMIT;
+    const page = Number(req.query.pageNumber) || 1;
+  
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: 'i',
+          },
+        }
+      : {};
+  
+    const count = await Product.countDocuments({ ...keyword });
+    const products = await Product.find({ ...keyword })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+  
+    res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  }));
 
 router.get('/api/products/work',(req,res)=>{
     res.send("work please");
@@ -30,7 +45,6 @@ router.get('/api/products/:id', wrapAsync(async(req,res)=>{
 return res.json(product);
     }
         res.status(404).json({message:"Product not available"});
-      
 }));
 
 // creating a new product 

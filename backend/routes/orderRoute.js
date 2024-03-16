@@ -68,7 +68,7 @@ router.get('/api/orders/:id', protect, wrapAsync(async (req, res) => {
 
   
 //updating the payment status
-router.get('/api/orders/:id/pay',protect,wrapAsync(async(req,res)=>{
+router.put('/api/orders/:id/pay',protect,wrapAsync(async(req,res)=>{
   const order=await Order.findById(req.params._id);
   if(order){
     order.isPaid=true;
