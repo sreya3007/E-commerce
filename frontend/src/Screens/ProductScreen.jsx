@@ -7,38 +7,29 @@ import { Form, Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap'
 import Rating from '../components/Rating';
 import axios from 'axios';
 import { addToCart } from '../slices/cartSlice';
-import { useGetProductDetailsQuery } from '../slices/productSlices';
-
 const ProductScreen = () => {
-    const { id: productId } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { data: product, isLoading, error } = useGetProductDetailsQuery(
-        productId
-    )
-
-
-    // useEffect(() => {
-    //     const fetchProduct = async () => {
-    //         const { data } = await axios.get(`/api/products/${productId}`);
-    //         setProduct(data);
-    //     };
-
-    //     fetchProduct(); 
-    // }, [productId]);
-    const [qty, setQty] = useState(1);
+    const { id: productId } = useParams();
+    const [product, setProduct] = useState({});
     const addToCartHandller = () => {
         dispatch(addToCart({ ...product, qty }))
         navigate('/cart')
     }
-
-
+    useEffect(() => {
+        const fetchProduct = async () => {
+            const { data } = await axios.get(`/api/products/${productId}`);
+            setProduct(data);
+        };
+        fetchProduct();
+    }, [productId]);
+    const [qty, setQty] = useState(1);
     return (
         <>
             <Link to='/' className='btn btn-light my-3'>
                 Go Back
             </Link>
-            {isLoading ? (<h2>Loading..</h2>) : error ? (<div>{error?.data.message || error.error}</div>) : (<Row>
+            <Row>
                 <Col md={5}>
                     <Image src={product.image} alt={product.name} fluid />
                 </Col>
@@ -68,7 +59,6 @@ const ProductScreen = () => {
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
-
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Status:</Col>
@@ -77,7 +67,6 @@ const ProductScreen = () => {
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
-
                             {/* Qty Select */}
                             {product.countInStock > 0 && (
                                 <ListGroup.Item>
@@ -101,7 +90,6 @@ const ProductScreen = () => {
                                     </Row>
                                 </ListGroup.Item>
                             )}
-
                             <ListGroup.Item>
                                 <div className="d-flex justify-content-center">
                                     <Button
@@ -115,8 +103,7 @@ const ProductScreen = () => {
                         </ListGroup>
                     </Card>
                 </Col>
-            </Row>)}
-
+            </Row>
         </>
     );
 };

@@ -1,5 +1,5 @@
 import { USERS_URL } from '../constants';
-import { apiSlice } from './apiSlices';
+import { apiSlice } from './apiSlice';
 
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -27,8 +27,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `${USERS_URL}/profile`,
                 method: 'PUT',
-            })
-        })
+                body: data,
+            }),
+        }),
+
     }),
 });
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation } = userApiSlice;
+
+export const {
+    useLoginMutation,
+    useLogoutMutation,
+    useRegisterMutation,
+    useProfileMutation,
+} = userApiSlice;

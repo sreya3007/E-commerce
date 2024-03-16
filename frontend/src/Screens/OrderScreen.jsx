@@ -7,14 +7,13 @@ import { toast } from 'react-toastify';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import {
+    useDeliverOrderMutation,
     useGetOrderDetailsQuery,
     usePayOrderMutation,
     useGetPaypalClientIdQuery,
-} from '../slices/orderApiSlice';
-
+} from '../slices/ordersApiSlice';
 const OrderScreen = () => {
     const { id: orderId } = useParams();
-
     const {
         data: order,
         refetch,
@@ -23,6 +22,8 @@ const OrderScreen = () => {
     } = useGetOrderDetailsQuery(orderId);
 
     const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation();
+    const [deliverOrder, { isLoading: loadingDeliver }] =
+        useDeliverOrderMutation();
 
     const { userInfo } = useSelector((state) => state.auth);
 
@@ -33,7 +34,6 @@ const OrderScreen = () => {
         isLoading: loadingPayPal,
         error: errorPayPal,
     } = useGetPaypalClientIdQuery();
-
     useEffect(() => {
         if (!errorPayPal && !loadingPayPal && paypal.clientId) {
             const loadPaypalScript = async () => {
@@ -66,6 +66,21 @@ const OrderScreen = () => {
             }
         });
     }
+    // async function onApproveTest() {
+    //     try {
+    //         // Call payOrder mutation to mark the order as paid
+    //         await payOrder({ orderId, details: { payer: {} } });
+
+    //         // Once the mutation is successful, refetch the order details
+    //         await refetch();
+
+    //         // Show success toast
+    //         toast.success('Order is paid');
+    //     } catch (err) {
+    //         // Show error toast if there's an error
+    //         toast.error(err?.data?.message || err.error);
+    //     }
+    // }
 
     async function onApproveTest() {
         await payOrder({ orderId, details: { payer: {} } });
@@ -91,7 +106,10 @@ const OrderScreen = () => {
                 return orderID;
             });
     }
-
+    const deliverHandler = async () => {
+        await deliverOrder(orderId);
+        refetch();
+    };
     return isLoading ? (
         <Loader />
     ) : error ? (
@@ -207,8 +225,16 @@ const OrderScreen = () => {
                                     loadingPay && <Loader />}
                                     {isPending ? <Loader /> : (
                                         <div>
-                                            <Button onClick={onApproveTest} style={{ marginBottom: '10px' }}> Test Button</Button>
+                                            {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
+                                            <Button
+                                                style={{ marginBottom: '10px' }}
+                                                onClick={onApproveTest}
+                                            >
+                                                Test Pay Order
+                                            </Button>
+
                                             <div>
+                                                <PayPalButtons />
                                                 <PayPalButtons
                                                     createOrder={createOrder}
                                                     onApprove={onApprove}
@@ -221,6 +247,22 @@ const OrderScreen = () => {
 
                             {/* PAY ORDER PLACEHOLDER */}
                             {/* {MARK AS DELIVERED PLACEHOLDER} */}
+                            {loadingDeliver && <Loader />}
+
+                            {userInfo &&
+                                userInfo.isAdmin &&
+                                order.isPaid &&
+                                !order.isDelivered && (
+                                    <ListGroup.Item>
+                                        <Button
+                                            type='button'
+                                            className='btn btn-block'
+                                            onClick={deliverHandler}
+                                        >
+                                            Mark As Delivered
+                                        </Button>
+                                    </ListGroup.Item>
+                                )}
                         </ListGroup>
                     </Card>
                 </Col>
