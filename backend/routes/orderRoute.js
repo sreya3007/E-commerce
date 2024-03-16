@@ -9,7 +9,12 @@ const {protect,checkAdmin}=require('../middleware/authenticate');
 //creating new orders
 
 router.post('/api/orders', protect, wrapAsync(async (req, res) => {
-  const { orderItems, shippingAddress, paymentMethod } = req.body;
+  const {orderItems, shippingAddress,
+    paymentMethod,
+    itemsPrice,
+    taxPrice,
+    shippingPrice,
+    totalPrice, } = req.body;
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
@@ -62,6 +67,24 @@ router.get('/api/orders/:id', protect, wrapAsync(async (req, res) => {
 }));
 
   
+//updating the payment status
+router.get('/api/orders/:id/pay',protect,wrapAsync(async(req,res)=>{
+  const order=await Order.findById(req.params._id);
+  if(order){
+    order.isPaid=true;
+    order.paidAt=Date.now();
+    order.paymentResult={
+      id: req.body.id,
+      status: req.body.status,
+      update_time:req.body.update_time,
+      email_address:req.body.payer.email_address,
+    };
+    const updatedOrder= await order.save();
+    res.status(200).json(updatedOrder);
+  }
+}));
+
+
 //integrating admin routes
 
 router.get( '/api/orders/:id/deliver',protect,checkAdmin,wrapAsync(async (req, res) => {
