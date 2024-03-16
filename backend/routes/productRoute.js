@@ -27,16 +27,21 @@ router.get('/api/products',wrapAsync(async (req, res) => {
   
     const count = await Product.countDocuments({ ...keyword });
     const products = await Product.find({ ...keyword })
-      .limit(pageSize)
-      .skip(pageSize * (page - 1));
+      .limit(pageSize)   //setting a limit for the number of pages we can make
+      .skip(pageSize * (page - 1)); // if we are on 3rd page we skip the products that are on 1st and 2nd page
   
-    res.json({ products, page, pages: Math.ceil(count / pageSize) });
+    res.json({ products, page, pages: Math.ceil(count / pageSize) }); // for displaying the count of pages and the page we are in 
   }));
 
 router.get('/api/products/work',(req,res)=>{
     res.send("work please");
-})
+});
 
+
+router.get( '/api/products/top',wrapAsync(async (req, res) => {
+    const products = await Product.find({}).sort({ rating: -1 }).limit(4);
+    res.json(products);
+  }));
 
 // getting a single product along with its details
 router.get('/api/products/:id', wrapAsync(async(req,res)=>{
@@ -46,6 +51,11 @@ return res.json(product);
     }
         res.status(404).json({message:"Product not available"});
 }));
+
+
+
+
+//creating admin routes
 
 // creating a new product 
 router.post( '/api/products',protect,checkAdmin,wrapAsync(async (req, res) => {
