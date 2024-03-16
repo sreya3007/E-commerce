@@ -1,30 +1,38 @@
-const wrapAsync =require ('../middleware/errorHandling');
+const wrapAsync = require('../middleware/errorHandling');
 const Order = require('../models/order');
-const Product =require('../models/products');
-const express=require('express');
-const router=express.Router();
-const {protect,checkAdmin}=require('../middleware/authenticate');
+const Product = require('../models/products');
+const express = require('express');
+const router = express.Router();
+const { protect, checkAdmin } = require('../middleware/authenticate');
 
 
 //creating new orders
 
 router.post('/api/orders', protect, wrapAsync(async (req, res) => {
-  const { orderItems, shippingAddress, paymentMethod } = req.body;
+  const {
+    orderItems,
+    shippingAddress,
+    paymentMethod,
+    itemsPrice,
+    taxPrice,
+    shippingPrice,
+    totalPrice,
+  } = req.body;
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error('No order items');
-  } 
+  }
   else {
     // const itemsFromDB = await Product.find({
     //   _id: { $in: orderItems.map((x) => x._id) },
     // });
 
     const order = new Order({
-      orderItems: orderItems.map((x)=>({
+      orderItems: orderItems.map((x) => ({
         ...x,
         product: x._id,
-        _id:undefined
+        _id: undefined
       })),
       user: req.user._id,
       shippingAddress,
@@ -43,7 +51,7 @@ router.post('/api/orders', protect, wrapAsync(async (req, res) => {
 
 
 //getting all user orders
-router.get('/api/orders/myorders', protect , wrapAsync(async (req, res) => {
+router.get('/api/orders/myorders', protect, wrapAsync(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
   res.json(orders);
 }));
@@ -51,7 +59,7 @@ router.get('/api/orders/myorders', protect , wrapAsync(async (req, res) => {
 
 //gettting the user orders by id
 router.get('/api/orders/:id', protect, wrapAsync(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate('user','name email');
+  const order = await Order.findById(req.params.id).populate('user', 'name email');
 
   if (order) {
     res.json(order);
@@ -61,10 +69,10 @@ router.get('/api/orders/:id', protect, wrapAsync(async (req, res) => {
   }
 }));
 
-  
+
 //integrating admin routes
 
-router.get( '/api/orders/:id/deliver',protect,checkAdmin,wrapAsync(async (req, res) => {
+router.get('/api/orders/:id/deliver', protect, checkAdmin, wrapAsync(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
   if (order) {
@@ -80,10 +88,10 @@ router.get( '/api/orders/:id/deliver',protect,checkAdmin,wrapAsync(async (req, r
 }));
 
 
-router.get( '/api/orders',protect,checkAdmin,wrapAsync(async (req, res) => {
+router.get('/api/orders', protect, checkAdmin, wrapAsync(async (req, res) => {
   const orders = await Order.find({}).populate('user', 'id name');
   res.json(orders);
 }));
 
 
-module.exports=router;
+module.exports = router;

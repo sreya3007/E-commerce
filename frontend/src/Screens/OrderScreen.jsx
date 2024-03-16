@@ -11,10 +11,8 @@ import {
     usePayOrderMutation,
     useGetPaypalClientIdQuery,
 } from '../slices/orderApiSlice';
-
 const OrderScreen = () => {
     const { id: orderId } = useParams();
-
     const {
         data: order,
         refetch,
@@ -207,13 +205,21 @@ const OrderScreen = () => {
                                     loadingPay && <Loader />}
                                     {isPending ? <Loader /> : (
                                         <div>
-                                            <Button onClick={onApproveTest} style={{ marginBottom: '10px' }}> Test Button</Button>
+                                            {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
+                                            <Button
+                                                style={{ marginBottom: '10px' }}
+                                                onClick={onApproveTest}
+                                            >
+                                                Test Pay Order
+                                            </Button>
+
                                             <div>
-                                                <PayPalButtons
+                                                <PayPalButtons />
+                                                {/* <PayPalButtons
                                                     createOrder={createOrder}
                                                     onApprove={onApprove}
                                                     onError={onError}
-                                                ></PayPalButtons>
+                                                ></PayPalButtons> */}
                                             </div>
                                         </div>
                                     )}</ListGroup.Item>
