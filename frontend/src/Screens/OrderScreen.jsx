@@ -64,6 +64,21 @@ const OrderScreen = () => {
             }
         });
     }
+    // async function onApproveTest() {
+    //     try {
+    //         // Call payOrder mutation to mark the order as paid
+    //         await payOrder({ orderId, details: { payer: {} } });
+
+    //         // Once the mutation is successful, refetch the order details
+    //         await refetch();
+
+    //         // Show success toast
+    //         toast.success('Order is paid');
+    //     } catch (err) {
+    //         // Show error toast if there's an error
+    //         toast.error(err?.data?.message || err.error);
+    //     }
+    // }
 
     async function onApproveTest() {
         await payOrder({ orderId, details: { payer: {} } });
@@ -215,11 +230,11 @@ const OrderScreen = () => {
 
                                             <div>
                                                 <PayPalButtons />
-                                                {/* <PayPalButtons
+                                                <PayPalButtons
                                                     createOrder={createOrder}
                                                     onApprove={onApprove}
                                                     onError={onError}
-                                                ></PayPalButtons> */}
+                                                ></PayPalButtons>
                                             </div>
                                         </div>
                                     )}</ListGroup.Item>

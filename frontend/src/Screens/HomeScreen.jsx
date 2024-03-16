@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Product from '../components/Product';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 const HomeScreen = () => {
+    const { keyword } = useParams();
     const [products, setProducts] = useState([]);
     useEffect(() => {
         const fetchProducts = async () => {

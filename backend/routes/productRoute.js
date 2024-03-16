@@ -75,17 +75,47 @@ router.post( '/api/products',protect,checkAdmin,wrapAsync(async (req, res) => {
     }
   }));
   
+
   //deleting a product
-  router.delete( '/api/products/:id',protect,checkAdmin,wrapAsync(async (req, res) => {
-    const product = await Product.findById(req.params.id); // finding the product by id 
+//   router.delete( '/api/products/:id', protect , checkAdmin , wrapAsync(async (req, res) => {
+//     const  product=await Product.findById(req.params.id); // finding the product by id 
+  
+//     if (product) {
+//       await Product.deleteOne({ _id: product._id });
+//       res.json({ message: 'Product removed' });
+//     } else {
+//       res.status(404);
+//       throw new Error('Product not found');
+//     }
+//   }));
+  
+
+  router.delete('/api/products/:id', protect, checkAdmin, wrapAsync(async (req, res) => {
+    const product = await Product.findByIdAndDelete(req.params.id);
   
     if (product) {
-      await Product.deleteOne({ _id: product._id });
       res.json({ message: 'Product removed' });
     } else {
-      res.status(404);
-      throw new Error('Product not found');
+      res.status(404).json({ error: 'Product not found' });
     }
   }));
-  
+
+//   router.delete( '/api/products/:id',protect, checkAdmin, async (req, res) => {
+//     try {
+//       await Product.findByIdAndDelete(req.params.id);
+//       res.status(200).json({
+       
+//         message: 'Product removed',
+//       });
+//     } catch (error) {
+      
+//       res.status(404).json({
+//         message: "Product not found",
+//         error,
+        
+//       });
+//     }
+//   });
+
+
 module.exports=router;
