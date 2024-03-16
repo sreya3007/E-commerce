@@ -9,6 +9,7 @@ const ProductRoutes= require('./routes/productRoute');
 const UserRoutes=require('./routes/userRoute');
 const OrderRoutes=require('./routes/orderRoute');
 const PaymentRoutes=require('./routes/paymentRoute');
+const uploadRoutes=require('./routes/uploadRoute');
 const cookieParser=require('cookie-parser');
 const { notFound, errorHandler }=require('./middleware/errorType');
 const port = process.env.PORT ; // just in case our actual port is down we can use a default 8080
@@ -27,9 +28,11 @@ app.use(ProductRoutes); // froms  the baseURL for all the routes in ProductRoute
 app.use(UserRoutes);
 app.use(OrderRoutes);
 app.use(PaymentRoutes);
+app.use(uploadRoutes);
 
-app.get('/api/products/hello',(req,res)=>{
+app.get('/api/hello',(req,res)=>{
     res.send("hello testing 123");
+    
     });
 
 app.use(notFound);
