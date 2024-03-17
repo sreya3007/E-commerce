@@ -68,12 +68,14 @@ router.get('/api/orders/:id', protect, wrapAsync(async (req, res) => {
 
 
 //updating the payment status
+
 router.put('/api/orders/:id/pay', protect, wrapAsync(async (req, res) => {
   const order = await Order.findById(req.params._id);
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
     order.paymentResult = {
+
       id: req.body.id,
       status: req.body.status,
       update_time: req.body.update_time,

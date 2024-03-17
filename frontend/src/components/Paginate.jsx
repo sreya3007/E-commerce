@@ -23,5 +23,4 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
         )
     );
 };
-
 export default Paginate;
