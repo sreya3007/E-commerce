@@ -1,15 +1,13 @@
-import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-
+import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 
 import { useLoginMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
-import '../assets/Styles/additional.css';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
@@ -25,7 +23,6 @@ const LoginScreen = () => {
     const { search } = useLocation();
     const sp = new URLSearchParams(search);
     const redirect = sp.get('redirect') || '/';
-    //we are using useLocation hookto get the URL and then search for redirect in those params
 
     useEffect(() => {
         if (userInfo) {
@@ -37,7 +34,7 @@ const LoginScreen = () => {
         e.preventDefault();
         try {
             const res = await login({ email, password }).unwrap();
-            dispatch(setCredentials({ ...res, }));
+            dispatch(setCredentials({ ...res }));
             navigate(redirect);
         } catch (err) {
             toast.error(err?.data?.message || err.error);
@@ -69,10 +66,11 @@ const LoginScreen = () => {
                     ></Form.Control>
                 </Form.Group>
 
-                <Button type='submit' variant='primary' className='mt-2'>
+                <Button disabled={isLoading} type='submit' variant='primary'>
                     Sign In
                 </Button>
 
+                {isLoading && <Loader />}
             </Form>
 
             <Row className='py-3'>

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import CheckoutSteps from '../components/CheckoutSteps';
-import { savePaymentMethod } from "../slices/cartSlice";
+import { savePaymentMethod } from '../slices/cartSlice';
 
 const PaymentScreen = () => {
     const navigate = useNavigate();

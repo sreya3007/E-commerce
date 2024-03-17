@@ -11,8 +11,11 @@ import { clearCartItems } from '../slices/cartSlice';
 
 const PlaceOrderScreen = () => {
     const navigate = useNavigate();
+
     const cart = useSelector((state) => state.cart);
+
     const [createOrder, { isLoading, error }] = useCreateOrderMutation();
+
     useEffect(() => {
         if (!cart.shippingAddress.address) {
             navigate('/shipping');
@@ -20,6 +23,7 @@ const PlaceOrderScreen = () => {
             navigate('/payment');
         }
     }, [cart.paymentMethod, cart.shippingAddress.address, navigate]);
+
     const dispatch = useDispatch();
     const placeOrderHandler = async () => {
         try {
@@ -32,14 +36,13 @@ const PlaceOrderScreen = () => {
                 taxPrice: cart.taxPrice,
                 totalPrice: cart.totalPrice,
             }).unwrap();
-            const orderId = res._id;
-
             dispatch(clearCartItems());
-            navigate(`/order/${orderId}`);
+            navigate(`/order/${res._id}`);
         } catch (err) {
             toast.error(err);
         }
     };
+
     return (
         <>
             <CheckoutSteps step1 step2 step3 step4 />
@@ -55,11 +58,13 @@ const PlaceOrderScreen = () => {
                                 {cart.shippingAddress.country}
                             </p>
                         </ListGroup.Item>
+
                         <ListGroup.Item>
                             <h2>Payment Method</h2>
                             <strong>Method: </strong>
                             {cart.paymentMethod}
                         </ListGroup.Item>
+
                         <ListGroup.Item>
                             <h2>Order Items</h2>
                             {cart.cartItems.length === 0 ? (
@@ -83,7 +88,8 @@ const PlaceOrderScreen = () => {
                                                     </Link>
                                                 </Col>
                                                 <Col md={4}>
-                                                    {item.qty} x ${item.price} = ${item.qty * item.price}
+                                                    {item.qty} x ${item.price} = $
+                                                    {(item.qty * (item.price * 100)) / 100}
                                                 </Col>
                                             </Row>
                                         </ListGroup.Item>
@@ -102,7 +108,7 @@ const PlaceOrderScreen = () => {
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Items</Col>
-                                    <Col>${cart.cartPrice}</Col>
+                                    <Col>${cart.itemsPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
@@ -124,10 +130,9 @@ const PlaceOrderScreen = () => {
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                {/* {error && <Message variant='danger'>{error}</Message>} */}
-                                <ListGroup.Item>
-                                    {error && <Message variant='danger'>{error.message}</Message>}
-                                </ListGroup.Item>
+                                {error && (
+                                    <Message variant='danger'>{error.data.message}</Message>
+                                )}
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Button
@@ -147,4 +152,5 @@ const PlaceOrderScreen = () => {
         </>
     );
 };
+
 export default PlaceOrderScreen;
