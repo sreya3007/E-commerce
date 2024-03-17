@@ -6,15 +6,19 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/Styles/bootstrap.custom.css';
 import './assets/Styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import HomeScreen from './Screens/HomeScreen';
+
 import ProductScreen from './Screens/ProductScreen';
 import AdminRoute from './components/AdminRoute';
-import { PayPalScriptProvider } from '@paypal/react-paypal-js'
+// import { PayPalScriptProvider } from '@paypal/react-paypal-js'
 import { Provider } from 'react-redux';
 import store from './store';
 import CartScreen from './Screens/CartScreen';
@@ -29,6 +33,8 @@ import ProductListScreen from './Screens/admin/ProductListScreen';
 import ProductEditScreen from './Screens/admin/ProductEditScreen';
 import OrderScreen from './Screens/OrderScreen';
 import ProfileScreen from './Screens/ProfileScreen';
+import CheckoutSuccess from './components/CheckoutSuccess';
+// const stripePromise=loadStripe (//strpe public key);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -49,6 +55,7 @@ const router = createBrowserRouter(
 
         <Route path='/order/:id' element={<OrderScreen />} />
         <Route path='profile' element={<ProfileScreen />} />
+        <Route path='/checkout-success' element={<CheckoutSuccess />} />
         {/* Admin users */}
         <Route path='' element={<AdminRoute />}>
           <Route path='/admin/orderlist' element={<OrderListScreen />} />
@@ -63,6 +70,7 @@ const router = createBrowserRouter(
             path='/search/:keyword/page/:pageNumber'
             element={<HomeScreen />}
           />
+
         </Route>
 
       </Route>
@@ -74,9 +82,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PayPalScriptProvider deferLoading={true}>
-        <RouterProvider router={router} />
-      </PayPalScriptProvider>
+      {/* <Elements stripe={stripePromise}> */}
+      {/* <PayPalScriptProvider deferLoading={true}> */}
+      <RouterProvider router={router} />
+      {/* </PayPalScriptProvider> */}
+      {/* </Elements> */}
     </Provider>
   </React.StrictMode>
 );
