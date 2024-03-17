@@ -6,12 +6,15 @@ import { useNavigate } from 'react-router-dom';
 const SearchBox = () => {
     const navigate = useNavigate();
     const { keyword: urlKeyword } = useParams();
-    const [keyword, setKeyword] = useState(urlKeyword);
+
+    // FIX: uncontrolled input - urlKeyword may be undefined
+    const [keyword, setKeyword] = useState(urlKeyword || '');
 
     const submitHandler = (e) => {
         e.preventDefault();
         if (keyword) {
             navigate(`/search/${keyword.trim()}`);
+            setKeyword('');
         } else {
             navigate('/');
         }

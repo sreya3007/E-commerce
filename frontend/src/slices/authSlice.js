@@ -1,9 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-//to check if userinfo is in local storage else null
 const initialState = {
-    userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
-}
+    userInfo: localStorage.getItem('userInfo')
+        ? JSON.parse(localStorage.getItem('userInfo'))
+        : null,
+};
 
 const authSlice = createSlice({
     name: 'auth',
@@ -15,10 +16,13 @@ const authSlice = createSlice({
         },
         logout: (state, action) => {
             state.userInfo = null;
-            localStorage.removeItem('userInfo');
-        }
+            // NOTE: here we need to also remove the cart from storage so the next
+            // logged in user doesn't inherit the previous users cart and shipping
+            localStorage.clear();
+        },
     },
 });
-export const { setCredentials } = authSlice.actions;
-export const { logout } = authSlice.actions;
+
+export const { setCredentials, logout } = authSlice.actions;
+
 export default authSlice.reducer;
