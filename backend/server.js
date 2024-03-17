@@ -1,3 +1,4 @@
+const path=require('path');
 const express= require('express');
 const dotenv= require('dotenv');
 dotenv.config();
@@ -32,16 +33,14 @@ app.use(uploadRoutes);
 
 app.get('/api/hello',(req,res)=>{
     res.send("hello testing 123");
-    
-    });
+       });
 
+const __dirname=path.resolve(); // setting dirname as the current dirname
+app.use('/uploads',express.static(path.join(__dirname, '/uploads')));
+      
 app.use(notFound);
 
 app.use(errorHandler);
-
-
-
-
 
 app.listen(port,()=>{
     console.log(`Server is running on ${port}`);

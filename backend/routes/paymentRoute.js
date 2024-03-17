@@ -1,105 +1,81 @@
-const express = require("express");
-const Stripe = require("stripe");
-const  Order  = require("../models/order");
+// const express = require("express");
+// const Stripe = require("stripe");
+// const  Order  = require("../models/order");
+// const Product=require('../models/products');
+// require("dotenv").config();
 
-require("dotenv").config();
+// const stripe = Stripe(process.env.STRIPE_API_KEY);
 
-const stripe = Stripe(process.env.STRIPE_API_KEY);
+// const router = express.Router();
 
+
+// router.post('/api/create-checkout-session',async(req,res)=>{
+//   const product =req.body;
+//   res.send(product
+// });
+
+// module.exports=router;
+
+
+
+const express = require('express');
 const router = express.Router();
 
-router.post("/create-checkout-session", async (req, res) => {
-  const customer = await stripe.customers.create({
-    metadata: {
-      userId: req.body.userId,
-      cart: JSON.stringify(req.body.orderItems),
-    },
-  });
+const dotenv = require('dotenv'); 
+dotenv.config();
+const stripe = require('stripe')(process.env.STRIPE_API_SECRET);
 
-  const line_items = req.body.orderItems.map((item) => {
-    return {
-      price_data: {
-        currency: "inr",
-        product_data: {
-          name: item.name,
-          images: [item.image],
-          description: item.desc,
-          metadata: {
-            id: item.id,
-          },
-        },
-        unit_amount: item.price * 100,
-      },
-      quantity: item.cartQuantity,
-    };
-  });
-
+router.post('api/stripe/create-checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    shipping_address_collection: {
-      allowed_countries: ["US", "IN"],
-    },
-    shipping_options: [
+    line_items: [
       {
-        shipping_rate_data: {
-          type: "fixed_amount",
-          fixed_amount: {
-            amount: 0,
-            currency: "inr",
+        price_data: {
+          currency: 'inr',
+          product_data: {
+            name: 'Apple-Headphones',
           },
-          display_name: "Free shipping",
-          
-          delivery_estimate: {
-            minimum: {
-              unit: "business_day",
-              value: 5,
-            },
-            maximum: {
-              unit: "business_day",
-              value: 7,
-            },
-          },
+          unit_amount: 2000,
         },
-      },
-      {
-        shipping_rate_data: {
-          type: "fixed_amount",
-          fixed_amount: {
-            amount: 1500,
-            currency: "inr",
-          },
-          display_name: "Next day air",
-          // Delivers in exactly 1 business day
-          delivery_estimate: {
-            minimum: {
-              unit: "business_day",
-              value: 1,
-            },
-            maximum: {
-              unit: "business_day",
-              value: 1,
-            },
-          },
-        },
+        quantity: 2,
       },
     ],
-    
-    line_items,
-    mode: "payment",
-    customer: customer.id,
-    success_url: `${process.env.CLIENT_URL}/checkout-success`,
-    cancel_url: `${process.env.CLIENT_URL}/`,
+    mode: 'payment',
+   success_url: `${process.env.CLIENT_URL}/api/checkout-success`,
+   cancel_url: `${process.env.CLIENT_URL}/api/cart`,
   });
 
-  // res.redirect(303, session.url);
-  res.send({ url: session.url });
+  res.send({url:session.url});
 });
 
 
+// router.post('/api/stripe/create-checkout-session', async (req, res) => {
+//     const line_items = req.body.order.orderItems.map((item) => {
+//       return {
+//         price_data: {
+//           currency: "inr",
+//           product_data: {
+//             name: item.name,
+//             images: [item.image],
+//             description: item.description,
+//             metadata: {
+//               id: item._id,
+//             },
+//           },
+//           unit_amount: item.price * 100,
+//         },
+//         quantity: item.qty,
+//       };
+//     });
+
+//     const session = await stripe.checkout.sessions.create({
+//       line_items,
+//     mode: 'payment',
+//     success_url: `${process.env.CLIENT_URL}/api/checkout-success`,
+//     cancel_url: `${process.env.CLIENT_URL}/api/cart`,
+//   });
+
+//   res.send({url:session.url});
+// });
 
 
-module.exports = router;
-
-
-
-
+module.exports=router;
