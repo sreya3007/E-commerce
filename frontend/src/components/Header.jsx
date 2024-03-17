@@ -44,7 +44,6 @@ const Header = () => {
                     <Navbar.Toggle aria-controls='basic-navbar-nav' />
                     <Navbar.Collapse id='basic-navbar-nav'>
                         <Nav className='ms-auto'>
-                            {/* Add FaHome icon next to the search box */}
                             <LinkContainer to="/" >
                                 <NavLink>
                                     <FaHome style={{ color: 'white', fontWeight: 'bold', marginTop: '15px' }} />
