@@ -1,6 +1,6 @@
 const express = require("express");
 const Stripe = require("stripe");
-const  Order  = require("../models/order");
+const Order = require("../models/order");
 
 require("dotenv").config();
 
@@ -16,7 +16,7 @@ router.post("/create-checkout-session", async (req, res) => {
     },
   });
 
-  const line_items = req.body.orderItems.map((item) => {
+  const line_items = req.body.order.map((item) => {
     return {
       price_data: {
         currency: "inr",
@@ -48,7 +48,7 @@ router.post("/create-checkout-session", async (req, res) => {
             currency: "inr",
           },
           display_name: "Free shipping",
-          
+
           delivery_estimate: {
             minimum: {
               unit: "business_day",
@@ -83,7 +83,7 @@ router.post("/create-checkout-session", async (req, res) => {
         },
       },
     ],
-    
+
     line_items,
     mode: "payment",
     customer: customer.id,
@@ -95,11 +95,5 @@ router.post("/create-checkout-session", async (req, res) => {
   res.send({ url: session.url });
 });
 
-
-
-
 module.exports = router;
-
-
-
 
