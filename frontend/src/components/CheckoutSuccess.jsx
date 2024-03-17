@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { clearCart, getTotals } from "../slices/cartSlice";
+import { clearCartItems } from "../slices/cartSlice";
 import { Link } from 'react-router-dom';
 
 
@@ -10,12 +10,12 @@ const CheckoutSuccess = () => {
     const cart = useSelector((state) => state.cart);
 
     useEffect(() => {
-        dispatch(clearCart());
+        dispatch(clearCartItems());
     }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(getTotals());
-    }, [cart, dispatch]);
+    // useEffect(() => {
+    //     dispatch(getTotals());
+    // }, [cart, dispatch]);
 
     return (
         <Container>

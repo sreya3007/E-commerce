@@ -33,6 +33,7 @@ import ProductListScreen from './Screens/admin/ProductListScreen';
 import ProductEditScreen from './Screens/admin/ProductEditScreen';
 import OrderScreen from './Screens/OrderScreen';
 import ProfileScreen from './Screens/ProfileScreen';
+import CheckoutSuccess from './components/CheckoutSuccess';
 // const stripePromise=loadStripe (//strpe public key);
 
 const router = createBrowserRouter(
@@ -54,6 +55,7 @@ const router = createBrowserRouter(
 
         <Route path='/order/:id' element={<OrderScreen />} />
         <Route path='profile' element={<ProfileScreen />} />
+        <Route path='/checkout-success' element={<CheckoutSuccess />} />
         {/* Admin users */}
         <Route path='' element={<AdminRoute />}>
           <Route path='/admin/orderlist' element={<OrderListScreen />} />
@@ -68,6 +70,7 @@ const router = createBrowserRouter(
             path='/search/:keyword/page/:pageNumber'
             element={<HomeScreen />}
           />
+
         </Route>
 
       </Route>
