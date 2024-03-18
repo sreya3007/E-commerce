@@ -13,11 +13,11 @@ router.post('/api/stripe/create-checkout-session', async (req, res) => {
     line_items: [
       {
         price_data: {
-          currency: 'INR',
+          currency: 'USD',
           product_data: {
             name: 'i-Phone',
           },
-          unit_amount: 2000000,
+          unit_amount: 20000,
         },
         quantity: 1,
       },
