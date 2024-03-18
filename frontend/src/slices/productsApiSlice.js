@@ -1,6 +1,6 @@
 import { PRODUCTS_URL } from '../constants';
 import { apiSlice } from './apiSlice';
-
+//inject endpoints to create endpoints for various operation we'll inject them into main slice(ApiSlice)'s builder to update a state.
 export const productsApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getProducts: builder.query({
@@ -46,14 +46,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
             }),
             providesTags: ['Product'],
         }),
-        createReview: builder.mutation({
-            query: (data) => ({
-                url: `${PRODUCTS_URL}/${data.productId}/reviews`,
-                method: 'POST',
-                body: data,
-            }),
-            invalidatesTags: ['Product'],
-        }),
+
         getTopProducts: builder.query({
             query: () => `${PRODUCTS_URL}/top`,
             keepUnusedDataFor: 5,

@@ -2,7 +2,7 @@ import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
 import { FaShoppingCart, FaUser, FaHome } from 'react-icons/fa';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';// replacing href with link so it does not load new page rather load that route only
 import { useLogoutMutation } from '../slices/usersApiSlice';
 import { logout } from '../slices/authSlice';
 import SearchBox from './SearchBox';
@@ -44,7 +44,6 @@ const Header = () => {
                     <Navbar.Toggle aria-controls='basic-navbar-nav' />
                     <Navbar.Collapse id='basic-navbar-nav'>
                         <Nav className='ms-auto'>
-                            {/* Add FaHome icon next to the search box */}
                             <LinkContainer to="/" >
                                 <NavLink>
                                     <FaHome style={{ color: 'white', fontWeight: 'bold', marginTop: '15px' }} />
@@ -85,7 +84,7 @@ const Header = () => {
                             )}
 
                             {/* Admin Links */}
-                            {userInfo && userInfo.isAdmin && (
+                            {userInfo && userInfo.isAdmin && (//check if user info present and user is admin condition
                                 <NavDropdown title='Admin' id='adminmenu'>
                                     <LinkContainer to='/admin/productlist'>
                                         <NavDropdown.Item>Products</NavDropdown.Item>
@@ -93,9 +92,7 @@ const Header = () => {
                                     <LinkContainer to='/admin/orderlist'>
                                         <NavDropdown.Item>Orders</NavDropdown.Item>
                                     </LinkContainer>
-                                    <LinkContainer to='/admin/userlist'>
-                                        <NavDropdown.Item>Users</NavDropdown.Item>
-                                    </LinkContainer>
+
                                 </NavDropdown>
                             )}
                         </Nav>

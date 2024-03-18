@@ -14,7 +14,6 @@ import {
 import { toast } from 'react-toastify';
 import {
     useGetProductDetailsQuery,
-    useCreateReviewMutation,
 } from '../slices/productsApiSlice';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
@@ -22,7 +21,7 @@ import Message from '../components/Message';
 import { addToCart } from '../slices/cartSlice';
 
 const ProductScreen = () => {
-    const { id: productId } = useParams();
+    const { id: productId } = useParams();//to destructure the url and get id passed 
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -45,23 +44,12 @@ const ProductScreen = () => {
 
     const { userInfo } = useSelector((state) => state.auth);
 
-    const [createReview, { isLoading: loadingProductReview }] =
-        useCreateReviewMutation();
+
 
     const submitHandler = async (e) => {
         e.preventDefault();
 
-        try {
-            await createReview({
-                productId,
-                rating,
-                comment,
-            }).unwrap();
-            refetch();
-            toast.success('Review created successfully');
-        } catch (err) {
-            toast.error(err?.data?.message || err.error);
-        }
+
     };
 
     return (
@@ -88,12 +76,9 @@ const ProductScreen = () => {
                                     <h3>{product.name}</h3>
                                 </ListGroup.Item>
                                 <ListGroup.Item>
-                                    <Rating
-                                        value={product.rating}
-                                        text={`${product.numReviews} reviews`}
-                                    />
+
                                 </ListGroup.Item>
-                                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                                <ListGroup.Item>Price: RS.{product.price}</ListGroup.Item>
                                 <ListGroup.Item>
                                     Description: {product.description}
                                 </ListGroup.Item>
@@ -106,7 +91,7 @@ const ProductScreen = () => {
                                         <Row>
                                             <Col>Price:</Col>
                                             <Col>
-                                                <strong>${product.price}</strong>
+                                                <strong>Rs.{product.price}</strong>
                                             </Col>
                                         </Row>
                                     </ListGroup.Item>

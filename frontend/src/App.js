@@ -29,7 +29,7 @@ const App = () => {
       <Header />
       <main className='py-3'>
         <Container>
-          <Outlet />
+          <Outlet /> {/*Roter Dom outlet to view the pages */}
         </Container>
       </main>
       <Footer />

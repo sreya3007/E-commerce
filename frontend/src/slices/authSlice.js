@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+//slice to just save user data into local storage and remove them
 
 const initialState = {
     userInfo: localStorage.getItem('userInfo')
@@ -12,7 +13,8 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action) => {
             state.userInfo = action.payload;
-            localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            localStorage.setItem('userInfo', JSON.stringify(action.payload));//It basically carries a payload of information from the application to the store. It only tells us what has happened.
+            //converting the action.payload object into a JSON string representation. This string can then be stored in localStorage.
         },
         logout: (state, action) => {
             state.userInfo = null;
@@ -26,3 +28,5 @@ const authSlice = createSlice({
 export const { setCredentials, logout } = authSlice.actions;
 
 export default authSlice.reducer;
+
+//this is not a child of apislices so need to add them independently to the store
