@@ -11,7 +11,7 @@ import ProductCarousel from '../components/ProductCarousel';
 const HomeScreen = () => {
     const { pageNumber, keyword } = useParams();
 
-    const { data, isLoading, error } = useGetProductsQuery({
+    const { data, isLoading, error } = useGetProductsQuery({ //geting data from the reducer we created
         keyword,
         pageNumber,
     });
@@ -54,3 +54,15 @@ const HomeScreen = () => {
 };
 
 export default HomeScreen;
+
+//using axios
+// const [products, setProducts] = useState([]);
+
+// useEffect(() => {
+//   const fetchProducts = async () => {
+//     const { data } = await axios.get('/api/products');
+//     setProducts(data);
+//   };
+
+//   fetchProducts();
+// }, []);d

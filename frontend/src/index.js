@@ -81,12 +81,8 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      {/* <Elements stripe={stripePromise}> */}
-      {/* <PayPalScriptProvider deferLoading={true}> */}
+    <Provider store={store}> {/*providing redux store to be accessible to entire app */}
       <RouterProvider router={router} />
-      {/* </PayPalScriptProvider> */}
-      {/* </Elements> */}
     </Provider>
   </React.StrictMode>
 );

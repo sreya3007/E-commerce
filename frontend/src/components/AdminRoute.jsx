@@ -10,3 +10,5 @@ const AdminRoute = () => {
     );//If userInfo doesn't exist or userInfo.isAdmin is false, it navigates the user to the login page using the Navigate component.
 };
 export default AdminRoute;
+
+//similar to private route but only admins are allowed to access
